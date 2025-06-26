@@ -1,1 +1,2 @@
-# fullstack-review-2506
+# fullstack-review
+# 초기세팅하기
