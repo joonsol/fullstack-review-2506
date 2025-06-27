@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './Navbar.scss'
 import { Link } from "react-router-dom"
 import { HiMenu, HiX } from "react-icons/hi";
+import { BrowserRouter } from 'react-router-dom';
 
 const menuItems = [
   { path: "/", label: "홈" },
@@ -40,7 +41,7 @@ const Navbar = () => {
             ))}
           </ul>
           <select
-            onClick={(e) => setLanguage(e.target.value)}
+            onChange={(e) => setLanguage(e.target.value)}
 
             className='language-select' value={language}>
             <option value="ko">한국어</option>
@@ -69,7 +70,7 @@ const Navbar = () => {
             ))}
           </ul>
           <select className='language-select'
-            onClick={(e) => setLanguage(e.target.value)}
+            onChange={(e) => setLanguage(e.target.value)}
             value={language}>
             <option value="ko">한국어</option>
             <option value="en">Englist</option>
