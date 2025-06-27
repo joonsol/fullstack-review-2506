@@ -1,8 +1,16 @@
 import React from 'react'
+
+import Contact from './Contact'
+import Hero from './Hero'
+import Forum from './Forum'
 import './MainPage.scss'
 const MainPage = () => {
   return (
-    <div>MainPage</div>
+    <div>
+      <Hero/>
+      <Contact/>
+      <Forum/>
+    </div>
   )
 }
 

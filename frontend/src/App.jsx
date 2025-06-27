@@ -10,6 +10,7 @@ import Board from './Page/Board/Board'
 import Leadership from './Page/Leadership/Leadership'
 import Service from './Page/Service/Service'
 import Contact from './Page/Contact/Contact'
+import About from './Page/About/About'
 
 function Layout(){
   return(

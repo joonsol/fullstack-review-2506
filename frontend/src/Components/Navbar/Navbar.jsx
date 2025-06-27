@@ -9,7 +9,7 @@ const menuItems = [
   { path: "/about", label: "회사 정보" },
   { path: "/leadership", label: "임원 소개" },
   { path: "/board", label: "업무 게시판" },
-  { path: "/our-services", label: "제공 기술" },
+  { path: "/service", label: "제공 기술" },
   { path: "/contact", label: "문의하기" }
 ];
 
@@ -29,8 +29,8 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen)
   return (
     <div className='navbar'>
-      <div className="navbar-container">
-        <h1>
+      <div className="inner">
+        <h1 className='navbar-logo'>
           <Link>Lix Co.</Link>
         </h1>
         <div className="navbar-menu">

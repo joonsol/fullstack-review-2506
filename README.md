@@ -1,1 +1,1 @@
-# router provider pages all update
+# router hero slider & app.scss index.scss
