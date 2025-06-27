@@ -1,0 +1,100 @@
+/* 변수 · 믹스인 공유용 import (선택) */
+/* @use "../styles/variables" as *; */
+
+.forum {
+  background: #fff;
+  padding: 7rem ;
+  .inner{
+    max-width: 118rem;
+  }
+
+
+  .forum-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  span {
+    font-size: 1.4rem;
+  
+  }
+
+  .forum-more {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    color: #1f2937;
+    background: #fff;
+    border: 1px solid #e5e7eb; // gray-200
+    border-radius: 1rem;
+    transition: background .3s;
+
+    .forum:hover { background: #f3f4f6; } // gray-100
+  }
+
+  /* 게시글 리스트 */
+  .forum-list {
+    border-radius: .75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,.05);
+  }
+
+  .forum-item {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background .3s;
+
+    >*{
+        flex: 1;
+    }
+
+    .forum:hover { background: #eff6ff; } // blue-50
+
+    .forum:last-child { border-bottom: 0; }
+  }
+
+  .forum-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.2rem;
+    color: #6b7280; // gray-500
+    margin-bottom: .5rem;
+  }
+
+  .forum-item-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #374151; // gray-800
+    margin-bottom: .25rem;
+    min-width: 30rem;
+    flex: 3;
+    .forum:hover { color: #2563eb; } // blue-600
+  }
+
+  .forum-date {
+    font-size: 1.3rem;
+    color: #6b7280;
+    max-width: 10%;
+}
+
+.forum-empty {
+    padding: 2rem;
+    text-align: center;
+    color: #6b7280;
+  }
+}
+
+/* 화살표 아이콘 – SVG 대체용 */
+.icon--arrow {
+    max-width: 10%;
+  width: 1.25rem;
+  height: 1.25rem;
+  mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23000'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 5l7 7-7 7'/%3e%3c/svg%3e") no-repeat center / contain;
+  background: currentColor;
+}
