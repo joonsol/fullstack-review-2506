@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import "@splidejs/react-splide/css";
 
-import { heroContents } from '../../Util/heroContents'
+import { heroContents,heroStats } from '../../Util/heroContents'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import useGsapAnimation from "../../hooks/useGsapAnimation";
 import { gsap } from "gsap";
@@ -64,6 +64,22 @@ const Hero = () => {
                     ))
                 }
             </Splide>
+            <div className="hero-stats-wrap">
+                <div className="inner">
+                    <ul className='hero-stats-list'>
+                        {heroContents.map((content,i)=>(
+                            <li
+                            
+                            key={i}>
+                                <h4>{content.title}</h4>
+                                <p>
+                                    {content.description}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
         </section>
     )
 }
