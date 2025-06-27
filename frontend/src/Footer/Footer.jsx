@@ -13,7 +13,7 @@ const Footer = () => {
 
   return (
     <footer className='footer'>
-      <div className="footer-container">
+      <div className="inner">
         <div className="footer-grid">
           <div>
             <h3 className="footer-title">회사소개</h3>
@@ -102,10 +102,11 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="footer-bottom">
-          <p>&copy; 2024 ABC Company. All rights reserved.</p>
         </div>
-      </div>
+          <div className="inner">
+
+          <p>&copy; 2024 ABC Company. All rights reserved.</p>
+          </div>
     </footer>
   )
 }
