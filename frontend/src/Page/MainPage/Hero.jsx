@@ -16,13 +16,7 @@ const Hero = () => {
             // const bg = ref.querySelector(".bg");
             const elements = ref.querySelectorAll("h2, p,button");
             if (index === activeIndex) {
-                // if (bg) {
-                //     gsap.fromTo(
-                //         bg,
-                //         { opacity: 0 },
-                //         { opacity: 1, duration: 0.5 } // bg는 opacity만 변경
-                //     );
-                // }
+
                 if (elements) {
                     gsap.fromTo(
                         elements,
@@ -32,9 +26,7 @@ const Hero = () => {
                 }
             }
             else {
-                // if (bg) {
-                //     gsap.set(bg, { opacity: 0 }); // bg 초기화
-                // }
+        
                 if (elements) {
                     gsap.set(elements, { opacity: 0, y: 50 }); // h2와 p 초기화
                 }
@@ -42,17 +34,7 @@ const Hero = () => {
 
         })
     }
-    const infoRef = useGsapAnimation(
-        {
-            from: { opacity: 0, y: 50 },
-            to: { opacity: 1, y: 0, duration: 1 },
-        },
-        {
-            start: "top 80%", // 트리거 시작 위치
-            end: "bottom 60%", // 트리거 종료 위치
-            toggleActions: "play none none none", // 애니메이션 트리거 액션
-        }
-    );
+
 
     return (
         <section className='hero'>
