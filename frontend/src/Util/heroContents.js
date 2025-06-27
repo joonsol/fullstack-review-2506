@@ -25,3 +25,21 @@ export const heroContents = [
     description: "Committed to sustainability and responsible practices.",
   },
 ];
+export const heroStats = [
+  {
+    title: "1,200+",
+    description: "설치 완료",
+  },
+  {
+    title: "98%",
+    description: "고객 만족도",
+  },
+  {
+    title: "15년+",
+    description: "업계 경력",
+  },
+  {
+    title: "24/7",
+    description: "기술 지원",
+  },
+];
