@@ -17,12 +17,12 @@ const About = () => {
 
           <div className="about-overlay"></div>
           <div className="about-hero-text">
-            <h2>{aboutData.hero.company}</h2>
+            <h3>{aboutData.hero.company}</h3>
             <p>{aboutData.hero.slogan}</p>
           </div>
         </div>
         <div className="about-section about-intro">
-          <h2>{aboutData.intro.title}</h2>
+          <h3>{aboutData.intro.title}</h3>
           <div className="about-text">
             {aboutData.intro.paragraphs.map((text, idx) => (
               <p key={idx}>{text}</p>
@@ -32,14 +32,14 @@ const About = () => {
         <div className="about-section about-values">
           {aboutData.values.map((value, index) => (
             <div key={index} className="value-card">
-              <h3>{value.title}</h3>
+              <h4>{value.title}</h4>
               <p>{value.desc}</p>
             </div>
           ))}
         </div>
         {/* Vision Section */}
         <div className="about-section about-vision">
-          <h2>{aboutData.vision.title}</h2>
+          <h3>{aboutData.vision.title}</h3>
           <p>
             {aboutData.vision.statement.split("\n").map((line, idx) => (
               <React.Fragment key={idx}>
@@ -50,7 +50,7 @@ const About = () => {
           </p>
         </div>
         <div className="about-section about-history">
-          <h2>{aboutData.history.title}</h2>
+          <h3>{aboutData.history.title}</h3>
           <div className="timeline">
             {aboutData.history.timeline.map((item, index) => (
               <div
@@ -58,7 +58,7 @@ const About = () => {
                 className={`timeline-item ${index % 2 === 0 ? "left" : "right"}`}
               >
                 <div className="timeline-box">
-                  <h3>{item.year}</h3>
+                  <h5>{item.year}</h5>
                   <p>{item.event}</p>
                 </div>
                 <div className="timeline-dot"></div>

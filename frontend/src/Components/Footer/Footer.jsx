@@ -40,20 +40,20 @@ const Footer = () => {
                   회사 정보
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to="/leadership"
                   onClick={scrollToTop}
                 >
                   임원 소개
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   to="/board"
                   onClick={scrollToTop}
                 >
-                  업무 게시판
+                  공지사항
                 </Link>
               </li>
               <li>

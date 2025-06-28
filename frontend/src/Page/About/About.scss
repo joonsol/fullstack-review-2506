@@ -1,9 +1,22 @@
 .about-container {
     margin-top: 8.3rem;
     padding: 8rem 1rem;
-}
+    text-align: center;
+    h3 {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        margin-bottom: 3rem;
+    }
+    p {
+        font-size: 1.3rem;
+        line-height: 1.4;
+        color: #4b5563;
+    }
+ }
 
 .about-hero {
+    text-align: left;
     position: relative;
     border-radius: 1rem;
     overflow: hidden;
@@ -11,12 +24,7 @@
     margin-bottom: 6rem;
     min-height: 60vh;
 
-    .about-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
+  
     .about-overlay {
         position: absolute;
         inset: 0;
@@ -44,31 +52,26 @@
 }
 
 .about-section {
-    margin-bottom: 6rem;
+    padding: 5rem 0 2rem;
 
-    h2 {
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 2rem;
-        color: #1e293b;
-    }
+
 }
 
 .about-intro .about-text {
-    max-width: 50%;
+    max-width: 60%;
     text-align: center;
     margin: 0 auto;
     color: #333333;
 
-    p+p {
-        margin-top: 1.5rem;
-    }
+
 }
 
 .about-values {
     display: grid;
     grid-template-columns: 1fr;
     gap: 3rem;
+    max-width: 80%;
+    margin: auto;
 
     @media (min-width: 768px) {
         grid-template-columns: repeat(3, 1fr);
@@ -83,9 +86,9 @@
         transition: 0.3s;
         cursor: pointer;
 
-        h3 {
+        h4 {
             color: #f37c45;
-            font-size: 3rem;
+            // font-size: 3rem;
             font-weight: bold;
             margin-bottom: 1rem;
         }
@@ -103,7 +106,7 @@
 
 .about-vision {
     max-width: 120rem;
-    margin:20rem auto;
+    margin:10rem auto;
     text-align: center;
 
     p {
@@ -115,7 +118,7 @@
 
 .about-history {
     .timeline {
-        max-width: 120rem;
+        max-width:80%;
         margin: 0 auto;
         display: flex;
         flex-direction: column;
@@ -140,8 +143,8 @@
             transition: 0.3s;
             border: 1px solid #f1f5f9;
 
-            h3 {
-                font-size: 3rem;
+            h5 {
+                font-size: 2.2rem;
                 font-weight: bold;
                 margin-bottom: 0.75rem;
                 color: #f37c45;
