@@ -4,7 +4,7 @@ import serviceBg from '../../assets/about_1.jpg'
 import { servicesList, whyUsList, processSteps } from '../../Util/service'
 const Service = () => {
   return (
-    <section className='service-container'>
+    <section className='service-container top-section'>
       <div className="inner">
         <div className="t-wrap">
 

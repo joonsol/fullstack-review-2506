@@ -12,6 +12,8 @@ import Service from './Page/Service/Service'
 import Contact from './Page/Contact/Contact'
 import About from './Page/About/About'
 
+import AdminLogin from './Page/Admin/AdminLogin'
+
 function Layout(){
   return(
     <>
@@ -54,6 +56,10 @@ const router =createBrowserRouter([
         element:<Contact/>
       },
     ]
+  },
+  {
+    path:"/admin",
+    element:<AdminLogin/>
   }
 ])
 

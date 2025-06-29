@@ -4,7 +4,7 @@ import { aboutData } from "../../Util/about";
 
 const About = () => {
   return (
-    <section className='about-container'>
+    <section className='about-container top-section'>
       <div className="inner">
         <div
           className="about-hero"

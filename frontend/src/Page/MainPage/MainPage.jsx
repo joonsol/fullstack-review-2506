@@ -6,7 +6,7 @@ import Forum from './Forum'
 import './MainPage.scss'
 const MainPage = () => {
   return (
-    <div>
+    <div className='top-section'>
       <Hero/>
       <Contact/>
       <Forum/>

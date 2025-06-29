@@ -15,7 +15,7 @@ const Board = () => {
   const currentPosts = dummyPosts.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
-    <section className='board-container'>
+    <section className='board-container top-section'>
       <div className="inner">
         <div className="t-wrap">
           <h3>공지사항</h3>
