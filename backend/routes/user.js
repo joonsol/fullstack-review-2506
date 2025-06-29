@@ -30,6 +30,23 @@ router.post("/signup", async (req, res) => {
   }
 })
 
+router.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
 
+    const user = await User.findOne({ username }).select("+password")
+
+    if (!user) {
+      return res.status(401).json({ message: "사용자 없음" })
+
+    }
+
+    await user.save()
+  } catch (error) {
+    res.status(500).json({ message: "서버 오류가 발생했습니다." })
+
+    console.log(error)
+  }
+})
 
 module.exports = router

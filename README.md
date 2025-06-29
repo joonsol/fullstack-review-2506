@@ -1,1 +1,1 @@
-# mongodb 연결
+# admin create
