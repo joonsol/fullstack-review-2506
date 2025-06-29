@@ -1,1 +1,1 @@
-# admin login update
+# redirect 방지하기

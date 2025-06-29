@@ -1,9 +1,8 @@
 import './App.scss'
 import Navbar from './Components/Navbar/Navbar'
 import Footer from './Components/Footer/Footer'
-import { BrowserRouter } from 'react-router-dom'
-
-import { createBrowserRouter,RouterProvider,Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Navigate, createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
 
 import MainPage from './Page/MainPage/MainPage'
 import Board from './Page/Board/Board'
@@ -13,53 +12,87 @@ import Contact from './Page/Contact/Contact'
 import About from './Page/About/About'
 
 import AdminLogin from './Page/Admin/AdminLogin'
+import { useState } from 'react'
+import axios from 'axios'
 
-function Layout(){
-  return(
+function AuthRedirectRoute() {
+  const [isAuthenticated, setIsAuthenticated] = useState(null)
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/auth/verify-token",
+          {},
+          { withCredentials: true }
+        )
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.log("토큰 인증 실패: ", error)
+        setIsAuthenticated(false)
+      }
+    }
+    verifyToken()
+  }, [])
+
+  if (isAuthenticated == null) {
+    return null;
+  }
+  return isAuthenticated ? <Navigate to="/admin/posts" replace /> : <Outlet />
+
+}
+
+
+function Layout() {
+  return (
     <>
-      <Navbar/>
-      <Outlet/>
-      <Footer/>
-    
+      <Navbar />
+      <Outlet />
+      <Footer />
+
     </>
   )
 }
 
 
-const router =createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path:'/',
-    element:<Layout/>,
-    children:[
+    path: '/',
+    element: <Layout />,
+    children: [
       {
-        index:true,
-        element:<MainPage/>
+        index: true,
+        element: <MainPage />
       },
       {
-        path:'/about',
-        element:<About/>
+        path: '/about',
+        element: <About />
       },
       {
-        path:'/leadership',
-        element:<Leadership/>
+        path: '/leadership',
+        element: <Leadership />
       },
       {
-        path:'/board',
-        element:<Board/>
+        path: '/board',
+        element: <Board />
       },
       {
-        path:'/service',
-        element:<Service/>
+        path: '/service',
+        element: <Service />
       },
       {
-        path:'/contact',
-        element:<Contact/>
+        path: '/contact',
+        element: <Contact />
       },
     ]
   },
   {
-    path:"/admin",
-    element:<AdminLogin/>
+    path: "/admin",
+    element: <AuthRedirectRoute />,
+    children: [{
+      index: true,
+      element: <AdminLogin />
+    }]
   }
 ])
 
@@ -67,7 +100,7 @@ const router =createBrowserRouter([
 function App() {
 
   return (
-   <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   )
 }
 
