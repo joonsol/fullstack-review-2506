@@ -1,8 +1,10 @@
 import './App.scss'
 import Navbar from './Components/Navbar/Navbar'
 import Footer from './Components/Footer/Footer'
+import { useState } from 'react'
 import { useEffect } from 'react'
 import { Navigate, createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
+import axios from 'axios'
 
 import MainPage from './Page/MainPage/MainPage'
 import Board from './Page/Board/Board'
@@ -12,8 +14,13 @@ import Contact from './Page/Contact/Contact'
 import About from './Page/About/About'
 
 import AdminLogin from './Page/Admin/AdminLogin'
-import { useState } from 'react'
-import axios from 'axios'
+import AdminNavbar from './Components/AdminNavbar/AdminNavbar'
+import AdminContacts from './Page/Admin/AdminContacts'
+import AdminCreatePost from './Page/Admin/AdminCreatePost'
+import AdminEditPost from './Page/Admin/AdminEditPost'
+import AdminPosts from './Page/Admin/AdminPosts'
+
+
 
 function AuthRedirectRoute() {
   const [isAuthenticated, setIsAuthenticated] = useState(null)
@@ -42,6 +49,39 @@ function AuthRedirectRoute() {
 
 }
 
+function ProtectedRoute() {
+  const [isAuthenticated, setIsAuthenticated] = useState(null)
+  const [user, setUser] = useState(null)
+
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/auth/verify-token",
+          {},
+          { withCredentials: true }
+        )
+        setIsAuthenticated(response.data.isValid);
+        setUser(response.data.uer)
+      } catch (error) {
+        console.log("토큰 인증 실패: ", error)
+        setIsAuthenticated(false)
+        setUser(null)
+      }
+    }
+    verifyToken()
+  }, [])
+
+  if (isAuthenticated == null) {
+    return null;
+  }
+  return isAuthenticated ?
+    <Outlet context={{ user }} /> :
+    <Navigate to="/admin" replace />
+
+}
+
 
 function Layout() {
   return (
@@ -53,7 +93,14 @@ function Layout() {
     </>
   )
 }
-
+function AdminLayout() {
+  return (
+    <>
+      <AdminNavbar />
+      <Outlet />
+    </>
+  )
+}
 
 const router = createBrowserRouter([
   {
@@ -93,6 +140,33 @@ const router = createBrowserRouter([
       index: true,
       element: <AdminLogin />
     }]
+  },
+  {
+    path: "/admin",
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <AdminLayout />,
+        children: [
+          {
+            path: 'posts',
+            element: <AdminPosts />
+          },
+          {
+            path: 'create-posts',
+            element: <AdminCreatePost />
+          },
+          {
+            path: 'edit-post/:id',
+            element: <AdminEditPost />
+          },
+          {
+            path: 'contacts',
+            element: <AdminContacts />
+          },
+        ]
+      }
+    ]
   }
 ])
 
