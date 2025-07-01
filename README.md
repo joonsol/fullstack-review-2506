@@ -1,1 +1,1 @@
-# admin contact get/ getid
+# admin contact put / delete

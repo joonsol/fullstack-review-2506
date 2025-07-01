@@ -68,5 +68,40 @@ router.get("/:id",  async (req, res) => {
     }
 })
 
+router.put("/:id",  async (req, res) => {
+    try {
+        const {status}=req.body
+        const contact =await Contact.findByIdAndUpdate(
+            req.params.id,
+            {status},
+            {new:true}
+        )
+        if(!contact){
+            return res.status(404).json({message:"문의를 찾을 수 없음"})
+        }
+        res.json({message:"문의 상태 성공적 수정!",contact})
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "서버에러" })
+
+    }
+})
+router.delete("/:id",  async (req, res) => {
+    try {
+        const contact =await Contact.findByIdAndDelete(
+            req.params.id
+        )
+        if(!contact){
+            return res.status(404).json({message:"문의를 찾을 수 없음"})
+        }
+        res.json({message:"문의 상태 성공적 삭제!"})
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "서버에러" })
+
+    }
+})
 
 module.exports = router
