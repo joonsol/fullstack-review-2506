@@ -1,8 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Contact.scss';
+import axios from "axios"
 import { contactInfoList, contactMapUrl } from '../../Util/contact'; // 경로는 위치에 따라 조정
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+    status: "in progress"
+  })
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/contact",
+        formData
+      )
+
+      if (response.status === 201) {
+        alert("문의가 성공적 접수")
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+          status: "in progress"
+        })
+      }
+
+
+    } catch (error) {
+      console.log("에러발생:", error)
+      alert("문의 접수중 오류 발생, 잠시후 다시 시도해라.")
+    }
+  }
   return (
     <section className="contact top-section">
       <div className="inner">
@@ -17,22 +59,41 @@ const Contact = () => {
         <div className="contact-body">
           {/* 문의 폼 */}
           <div className="contact-form-wrapper">
-            <form className="contact-form">
+            <form className="contact-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>이름</label>
-                <input type="text" placeholder="홍길동" required />
+                <input
+                  type="text"
+                  name='name'
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="홍길동" required />
               </div>
               <div className="form-group">
                 <label>이메일</label>
-                <input type="email" placeholder="example@email.com" required />
+                <input
+                  type="email"
+                  name='email'
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="example@email.com" required />
               </div>
               <div className="form-group">
                 <label>연락처</label>
-                <input type="tel" placeholder="010-1234-5678" required />
+                <input
+                  value={formData.phone}
+                  name='phone'
+                  onChange={handleChange}
+                  type="tel"
+                  placeholder="010-1234-5678" required />
               </div>
               <div className="form-group">
                 <label>문의 내용</label>
-                <textarea placeholder="문의하실 내용을 자세히 적어주세요." required />
+                <textarea
+                  value={formData.message}
+                  onChange={handleChange}
+                  name='message'
+                  placeholder="문의하실 내용을 자세히 적어주세요." required />
               </div>
               <button type="submit">문의하기</button>
             </form>
@@ -60,17 +121,17 @@ const Contact = () => {
           </div>
         </div>
         <div className="inner">
-                      <div className="contact-map">
-              <iframe
-                title="Company Location"
-                src={contactMapUrl}
-                width="100%"
-                height="400"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-              ></iframe>
-            </div>
+          <div className="contact-map">
+            <iframe
+              title="Company Location"
+              src={contactMapUrl}
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+            ></iframe>
+          </div>
         </div>
       </div>
     </section>
