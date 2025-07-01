@@ -1,1 +1,1 @@
-# admin contact model
+# admin contact get/ getid
