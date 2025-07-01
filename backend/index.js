@@ -11,6 +11,7 @@ const PORT = 3000;
 
 
 const userRoutes = require('./routes/user')
+const contactRoutes = require('./routes/contact')
 
 app.use(cors({
     origin:"http://localhost:5173",
@@ -22,6 +23,7 @@ app.use(cookieParser())
 
 
 app.use("/api/auth", userRoutes)
+app.use("/api/contact", contactRoutes)
 app.get("/", (req, res) => {
     res.send("Hello, world");
 })
