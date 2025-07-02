@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import "./AdminPosts.scss"
 import axios from "axios";
 
+
 const AdminPosts = () => {
   const [posts, setPosts] = useState([]);
   const [pageSize, setPageSize] = useState(10);
@@ -163,7 +164,11 @@ const AdminPosts = () => {
                   {new Date(post.updatedAt).toLocaleString()}
                 </span>
                 <span className="col actions">
-                  <button className="edit">수정</button>
+                  <button className="edit"
+                  onClick={()=>(
+                    window.location.href=`/admin/edit-post/${post._id}`
+                  )}
+                  >수정</button>
                   <button className="delete">삭제</button>
                 </span>
               </li>
