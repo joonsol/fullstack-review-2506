@@ -36,62 +36,70 @@ const verifyToken = (req, res, next) => {
     next();
 };
 
-router.post('/image', verifyToken, imageUpload.single('image'), async (req, res) => {
-    try {
-        const file = req.file;
-        const fileExtension = file.originalname.split('.').pop();
-        const fileName = `${uuidv4()}.${fileExtension}`;
+router.post(
+    '/image',
+    verifyToken,
+    imageUpload.single('image'),
+    async (req, res) => {
+        try {
+            const file = req.file;
+            const fileExtension = file.originalname.split('.').pop();
+            const fileName = `${uuidv4()}.${fileExtension}`;
 
 
-        const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `post-images/${fileName}`,
-            Body: file.buffer,
-            ContentType: file.mimetype,
-        };
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: `post-images/${fileName}`,
+                Body: file.buffer,
+                ContentType: file.mimetype,
+            };
 
-        const command = new PutObjectCommand(uploadParams);
-        await s3Client.send(command);
+            const command = new PutObjectCommand(uploadParams);
+            await s3Client.send(command);
 
-        const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/post-images/${fileName}`;
+            const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/post-images/${fileName}`;
 
-        res.json({ imageUrl });
-    } catch (error) {
-        console.error('S3 upload error:', error);
-        res.status(500).json({ error: "Failed to upload image" });
+            res.json({ imageUrl });
+        } catch (error) {
+            console.error('S3 upload error:', error);
+            res.status(500).json({ error: "Failed to upload image" });
 
-    }
-})
+        }
+    })
 
-router.post('/file', verifyToken, imageUpload.single('image'), async (req, res) => {
-    try {
-        const file = req.file;
-        const originalName = req.body.originalName;
-        const decodedFileName = decodeURIComponent(originalName)
+router.post(
+    '/file',
+    verifyToken,
+    fileUpload.single('file'),
+    async (req, res) => {
+        try {
+            const file = req.file;
+            const originalName = req.body.originalName;
+            const decodedFileName = decodeURIComponent(originalName)
 
-        const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `post-files/${decodedFileName}`,
-            Body: file.buffer,
-            ContentType: file.mimetype,
-            ContentDisposition: `attachment; filename*=UTF-8''${encodeURIComponent(decodedFileName)}`,
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: `post-files/${decodedFileName}`,
+                Body: file.buffer,
+                ContentType: file.mimetype,
+                ContentDisposition: `attachment; filename*=UTF-8''${encodeURIComponent(decodedFileName)}`,
 
-        };
+            };
 
-        const command = new PutObjectCommand(uploadParams);
-        await s3Client.send(command);
+            const command = new PutObjectCommand(uploadParams);
+            await s3Client.send(command);
 
-        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/post-images/${fileName}`;
+            const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/post-files/${decodedFileName}`;
 
-        res.json({
-            fileUrl,
-            originalName: decodedFileName
-        });
-    } catch (error) {
-        console.error('S3 upload error:', error);
-        res.status(500).json({ error: "Failed to upload file" });
 
-    }
-})
+            res.json({
+                fileUrl
+            });
+        } catch (error) {
+            console.error('S3 upload error:', error);
+            res.status(500).json({ error: "파일 업로드 중 에러 발생" });
 
-module.exports=router
+        }
+    })
+
+module.exports = router
