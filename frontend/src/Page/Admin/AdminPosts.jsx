@@ -98,7 +98,7 @@ const AdminPosts = () => {
               type="text" placeholder="검색어를 입력하세요" />
           </div>
 
-          <a href="#" className="add-button">
+          <a href="/admin/create-posts" className="add-button">
             추가하기
           </a>
         </div>
