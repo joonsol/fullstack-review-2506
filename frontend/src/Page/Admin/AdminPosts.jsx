@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import "./AdminPosts.scss"
 import axios from "axios";
+import Swal from "sweetalert2";
 
 
 const AdminPosts = () => {
@@ -9,38 +10,6 @@ const AdminPosts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("title");
-  const dummyPosts = [
-    {
-      _id: "1",
-      title: "첫 번째 게시글",
-      content: "이것은 첫 번째 게시글 내용입니다.",
-      views: 123,
-      fileUrl: ["https://example.com/file1.pdf"],
-      createdAt: "2023-12-01T12:00:00Z",
-      updatedAt: "2023-12-02T15:30:00Z",
-    },
-    {
-      _id: "2",
-      title: "두 번째 게시글",
-      content: "두 번째 게시글 내용입니다.",
-      views: 456,
-      fileUrl: [
-        "https://example.com/file2.pdf",
-        "https://example.com/file3.pdf",
-      ],
-      createdAt: "2023-12-03T10:00:00Z",
-      updatedAt: "2023-12-03T18:45:00Z",
-    },
-    {
-      _id: "3",
-      title: "세 번째 게시글",
-      content: "세 번째 게시글 내용입니다.",
-      views: 789,
-      fileUrl: [],
-      createdAt: "2023-12-05T09:00:00Z",
-      updatedAt: "2023-12-05T14:30:00Z",
-    },
-  ];
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -79,6 +48,31 @@ const AdminPosts = () => {
     return filteredPosts.slice(start, start + pageSize)
   }, [filteredPosts, currentPage, pageSize])
 
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: '삭제하시겠습니까?',
+      text: "이 작업은 되돌릴 수 없습니다!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소'
+    })
+
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`http://localhost:3000/api/post/${id}`,
+          { withCredentials: true }
+        )
+        setPosts(posts.filter(post => post._id !== id))
+        Swal.fire('삭제완료', '게시글이 성공적으로 삭제되었습니다.', 'success')
+      } catch (error) {
+        console.error('삭제 실패:', error);
+        Swal.fire('오류 발생!', '삭제 중 문제가 발생했습니다.', 'error');
+      }
+    }
+  }
   return (
     <div className="admin-posts">
       <div className="inner">
@@ -165,11 +159,13 @@ const AdminPosts = () => {
                 </span>
                 <span className="col actions">
                   <button className="edit"
-                  onClick={()=>(
-                    window.location.href=`/admin/edit-post/${post._id}`
-                  )}
+                    onClick={() => (
+                      window.location.href = `/admin/edit-post/${post._id}`
+                    )}
                   >수정</button>
-                  <button className="delete">삭제</button>
+                  <button 
+                  onClick={()=>handleDelete(post._id)}
+                  className="delete">삭제</button>
                 </span>
               </li>
             )))}
@@ -181,11 +177,11 @@ const AdminPosts = () => {
             disabled={currentPage === 1 || totalPages === 0}
           >이전</button>
           <span>
-              {totalPages > 0 ? `${currentPage} / ${totalPages}` : "0/0"}
+            {totalPages > 0 ? `${currentPage} / ${totalPages}` : "0/0"}
           </span>
           <button
-             onClick={() => setCurrentPage((p) => p + 1)}
-          disabled={currentPage >= totalPages || totalPages === 0}
+            onClick={() => setCurrentPage((p) => p + 1)}
+            disabled={currentPage >= totalPages || totalPages === 0}
           >다음</button>
         </div>
       </div>
