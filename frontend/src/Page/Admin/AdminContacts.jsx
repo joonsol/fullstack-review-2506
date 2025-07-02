@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import "./AdminContacts.scss"
 import axios from "axios"
+import Swal from "sweetalert2"
 const AdminContacts = () => {
 
   const [contacts, setContacts] = useState([])
@@ -10,7 +11,7 @@ const AdminContacts = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [searchType, setSearchType] = useState("name")
   const [statusFilter, setStatusFilter] = useState("all")
-
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -26,8 +27,8 @@ const AdminContacts = () => {
     fetchContacts()
 
   }, [])
-  
-    const getStatusClass = (status) => {
+
+  const getStatusClass = (status) => {
     switch (status) {
       case "대기중":
         return "status pending";
@@ -49,7 +50,7 @@ const AdminContacts = () => {
     })
 
 
-  }, [contacts,searchTerm,searchType,statusFilter])
+  }, [contacts, searchTerm, searchType, statusFilter])
   // const contacts = [
   //   {
   //     id: 1,
@@ -86,6 +87,77 @@ const AdminContacts = () => {
     const start = (currentPage - 1) * pageSize;
     return filteredContacts.slice(start, start + pageSize)
   }, [filteredContacts, currentPage, pageSize])
+
+  const handleStatusUpdate = async (contactId, newStatus) => {
+    try {
+      await axios.put(
+        `http://localhost:3000/api/contact/${contactId}`,
+        { status: newStatus },
+        { withCredentials: true }
+      )
+
+      setContacts(
+        contacts.map((contact) =>
+          contact._id === contactId ?
+            { ...contact, status: newStatus } : contact
+        )
+      )
+      setIsModalOpen(false)
+      Swal.fire("수정완료", "상태가 성공적으로 수정되었습니다.", "success")
+
+    } catch (error) {
+      console.log("수정 실패:", error)
+      Swal.fire("오류발생", "수정 중 문제가 발생했습니다.", "error")
+    }
+  }
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "삭제하시겠습니까?",
+      text: "이 작업은 되돌릴 수 없습니다!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+    })
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`http://localhost:3000/api/contact/${id}`, {
+          withCredentials: true
+        })
+        setContacts(contacts.filter(contact => contact._id !== id))
+
+        Swal.fire("삭제완료!", "문의가 성공적으로 삭제되었습니다.", "success")
+      } catch (error) {
+        console.log("수정 실패:", error)
+        Swal.fire("오류발생", "수정 중 문제가 발생했습니다.", "error")
+
+      }
+    }
+  }
+
+  const showStatusChangeModal = async (contact) => {
+    setSelectedContact(contact)
+
+    const { value: newStatus, isConfirmed } = await Swal.fire({
+      title: "문의 상태 수정",
+      input: "radio",
+      inputOptions: {
+        pending: "대기중",
+        "in progress": "진행중",
+        completed: "완료",
+      },
+      inputValue: contact.status,
+      confirmButtonText: "적용하기",
+      cancelButtonText: "취소",
+      showCancelButton: true,
+    })
+    if (isConfirmed && newStatus) {
+      handleStatusUpdate(contact._id, newStatus)
+    }
+  }
+
 
   return (
     <div className="admin-contacts">
@@ -127,10 +199,10 @@ const AdminContacts = () => {
                 setCurrentPage(1)
               }}
               value={pageSize}
-              >
-              {[10, 25, 50, 100].map((num,i) => (
+            >
+              {[10, 25, 50, 100].map((num, i) => (
                 <option
-                key={i}
+                  key={i}
                 >{`${num}개`}</option>
               ))}
             </select>
@@ -148,21 +220,25 @@ const AdminContacts = () => {
             <span className="col status">상태</span>
             <span className="col actions">관리</span>
           </li>
-          {paginatedContacts.map((contact,index) => (
-            <li key={contact.id} className="contact-row">
-              <span className="col no">{((currentPage-1)*pageSize+index+1)}</span>
+          {paginatedContacts.map((contact, index) => (
+            <li key={index} className="contact-row">
+              <span className="col no">{((currentPage - 1) * pageSize + index + 1)}</span>
               <span className="col name">{contact.name}</span>
               <span className="col email">{contact.email}</span>
               <span className="col phone">{contact.phone}</span>
               <span className="col message">{contact.message}</span>
-              <span className={`col status ${contact.status.replace(" ","-")}`}>
-                {contact.status==="in progress"?"진행중":
-                contact.status==="pending"?"대기중":"완료"
+              <span className={`col status ${contact.status.replace(" ", "-")}`}>
+                {contact.status === "in progress" ? "진행중" :
+                  contact.status === "pending" ? "대기중" : "완료"
                 }
-                </span>
+              </span>
               <span className="col actions">
-                <button className="edit">수정</button>
-                <button className="delete">삭제</button>
+                <button className="edit"
+                  onClick={() => showStatusChangeModal(contact)}
+                >수정</button>
+                <button className="delete"
+                  onClick={() => handleDelete(contact._id)}
+                >삭제</button>
               </span>
             </li>
           ))}
@@ -170,17 +246,17 @@ const AdminContacts = () => {
 
         {/* 페이지네이션 */}
         <div className="pagination">
-          <button 
-          onClick={()=>setCurrentPage((p)=>p-1)}
-          disabled={currentPage===1}
+          <button
+            onClick={() => setCurrentPage((p) => p - 1)}
+            disabled={currentPage === 1}
           >이전</button>
           <span>{currentPage} / {totalPages}</span>
           <button
-          
-          onClick={()=>setCurrentPage((p)=>p+1)}
-          disabled={currentPage===totalPages}
+
+            onClick={() => setCurrentPage((p) => p + 1)}
+            disabled={currentPage === totalPages}
           >
-          다음</button>
+            다음</button>
         </div>
       </div>
     </div>
