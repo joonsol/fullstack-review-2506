@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import "./AdminContacts.scss"
 import axios from "axios"
 const AdminContacts = () => {
-    {
 
   const [contacts, setContacts] = useState([])
   const [pageSize, setPageSize] = useState(10)
