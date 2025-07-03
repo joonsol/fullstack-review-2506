@@ -1,18 +1,61 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import './Board.scss'
 const Board = () => {
-  const [currentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
-  const dummyPosts = [
-    { _id: 1, number: 1, title: "첫 번째 게시물", createdAt: "2023-11-01T10:00:00", views: 10 },
-    { _id: 2, number: 2, title: "두 번째 게시물", createdAt: "2023-11-02T11:30:00", views: 20 },
-    { _id: 3, number: 3, title: "세 번째 게시물", createdAt: "2023-11-03T14:00:00", views: 30 },
-    { _id: 4, number: 4, title: "네 번째 게시물", createdAt: "2023-11-04T16:45:00", views: 40 },
-    { _id: 5, number: 5, title: "다섯 번째 게시물", createdAt: "2023-11-05T09:15:00", views: 50 },
-  ];
-  const indexOfLastPost = currentPage * itemsPerPage;
-  const indexOfFirstPost = indexOfLastPost - itemsPerPage;
-  const currentPosts = dummyPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const nav =useNavigate()
+  const [posts, setPosts] = useState([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchType, setSearchType] = useState("title");
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+
+
+
+
+
+  useEffect(() => {
+
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/post')
+        setPosts(response.data)
+      } catch (error) {
+        console.error("게시글 로딩 실패", error)
+      }
+    }
+    fetchPosts()
+
+  }, [])
+
+  const filteredPosts = useMemo(() => {
+    return posts.filter((post) => {
+      const value = post[searchType]?.toLowerCase() || "";
+      const matchesSearch = value.includes(searchTerm.toLowerCase())
+
+      const postDate = new Date(post.createdAt).getTime()
+      const start = startDate ? new Date(startDate).getTime() : null;
+      const end = endDate ? new Date(endDate).getTime() : null;
+
+
+      const matchsDate = (!start || postDate >= start) && (!end || postDate <= end)
+      return matchesSearch && matchsDate
+    })
+
+  }, [posts, searchTerm, searchType, startDate, endDate])
+
+  const totalPages = pageSize > 0 ? Math.ceil(filteredPosts.length / pageSize) : 1
+
+  const pagenatedPosts = useMemo(() => {
+    const start = (currentPage - 1) * pageSize
+
+    return filteredPosts.slice(start, start + pageSize)
+  }, [filteredPosts, currentPage, pageSize])
+
+
 
   return (
     <section className='board-container top-section'>
@@ -23,38 +66,55 @@ const Board = () => {
         <div className="controls">
           <div className="filters">
             <select
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
             >
-              <option value="name">한국어</option>
+              <option value="title">제목</option>
 
             </select>
             <input
-              type="text" placeholder="검색어를 입력하세요" />
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="검색어를 입력하세요" />
           </div>
 
 
         </div>
         <div className="date-filter-container">
           <div className="date-filter-group">
-            <label className="date-label">날짜</label>
+            <label className="date-label">작성일 시작</label>
             <input
               type="date"
               className="date-input"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
           <div className="date-filter-group">
-            <label className="date-label">날짜:</label>
+            <label className="date-label">작성일 끝</label>
             <input
               type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
               className="date-input"
             />
           </div>
         </div>
         {/* 게시글 수 & 페이지당 게시글 수 */}
         <div className="count-wrap">
-          <div className="total-count">총 게시글: {dummyPosts.length}건</div>
-          <select>
-            <option value="10">10개씩 보기</option>
-            <option value="20">20개씩 보기</option>
+          <div className="total-count">총 게시글: {posts.length}건</div>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value))
+              setCurrentPage(1)
+            }}
+          >
+            {[10, 25, 50, 100].map((size) => (
+
+              <option key={size} value={size}>{`${size}개`}</option>
+            ))}
           </select>
         </div>
         {/* 게시글 리스트 */}
@@ -66,25 +126,45 @@ const Board = () => {
             <div className="col">조회수</div>
           </li>
 
-          {currentPosts.map((post) => (
-            <li className="post-row" key={post._id}>
-              <div className="col no">{post.number}</div>
-              <div className="col title">{post.title}</div>
-              <div className="col"> {new Date(post.createdAt).toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit"
-              })}</div>
-              <div className="col">{post.views}</div>
-            </li>
-          ))}
+          {pagenatedPosts.length === 0 ? (
+            <div>
+              게시글이 없습니다.
+            </div>
+          ) : (
+            filteredPosts.map((post, index) => (
+              <li
+               onClick={()=>nav(`/post/${post._id}`)}
+                className="post-row" 
+                key={post._id} >
+                <div className="col no">
+                  {(currentPage - 1) * pageSize + index + 1}</div>
+                <div className="col title">{post.title}</div>
+                <div className="col">
+                  {new Date(post.createdAt).toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit"
+                  })}</div>
+                <div className="col">{post.views}</div>
+              </li>
+            )))
+          }
         </ul>
 
         {/* 페이지네이션 */}
         <div className="pagination">
-          <button disabled={currentPage === 1}>이전</button>
-          <span>{currentPage}</span>
-          <button>다음</button>
+          <button
+            value={startDate}
+            onClick={() => setCurrentPage((p) => p - 1)}
+            disabled={currentPage === 1 || totalPages === 0}
+          >이전</button>
+          <span>{currentPage}/{totalPages}</span>
+          <button
+            value={endDate}
+            onClick={() => setCurrentPage((p) => p + 1)}
+            disabled={currentPage >= totalPages || totalPages === 0}
+          >다음
+          </button>
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import "./Forum.scss";     // SCSS 연결
-
+import axios from "axios"
 const Forum = () => {
   const dummyPosts = [
     { _id: 1, number: 1, title: "첫 번째 게시물 입니다.", views: 120, fileUrl: ["file1"], createdAt: "2023-01-01" },
@@ -10,6 +10,25 @@ const Forum = () => {
     { _id: 4, number: 4, title: "네 번째 게시물 입니다.", views: 50,  fileUrl: [],        createdAt: "2023-01-15" },
     { _id: 5, number: 5, title: "다섯 번째 게시물 입니다.", views: 30,  fileUrl: ["file4"], createdAt: "2023-01-20" },
   ];
+
+  const [posts, setPosts]=useState([])
+  const [loading, setLoading]=useState(true)
+
+  useEffect(()=>{
+
+    const fetchPost = async()=>{
+      try {
+        const response = await axios.get('http://localhost:3000/api/post')
+        setPosts(response.data.slice(0,5))
+      } catch (error) {
+        console.error("게시글 로딩 실패",error)
+      }finally{
+        setLoading(false)
+      }
+    }
+    fetchPost()
+
+  },[])
 
   return (
     <section className="forum">
@@ -21,17 +40,18 @@ const Forum = () => {
             to="/board"
             className="forum-more"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
+            >
             전체보기
+
             <span className="icon icon--arrow" />
           </Link>
         </header>
 
         <div className="forum-list">
-          {dummyPosts.length === 0 ? (
+          {posts.length === 0 ? (
             <p className="forum-empty">최근 게시물이 없습니다.</p>
           ) : (
-            dummyPosts.map((post) => (
+            posts.map((post) => (
               <article key={post._id} className="forum-item">
                 <div className="forum-meta">
                   <span>No. {post.number}</span>
