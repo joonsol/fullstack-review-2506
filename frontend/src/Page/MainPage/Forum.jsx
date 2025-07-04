@@ -1,9 +1,10 @@
 import React,{useEffect, useState} from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import "./Forum.scss";     // SCSS 연결
 import axios from "axios"
 const Forum = () => {
 
+  const nav =useNavigate()
   const [posts, setPosts]=useState([])
   const [loading, setLoading]=useState(true)
 
@@ -45,7 +46,9 @@ const Forum = () => {
             <p className="forum-empty">최근 게시물이 없습니다.</p>
           ) : (
             posts.map((post) => (
-              <article key={post._id} className="forum-item">
+              <article key={post._id} 
+               onClick={() => nav(`/post/${post._id}`)}
+              className="forum-item">
                 <div className="forum-meta">
                   <span>No. {post.number}</span>
                   <span>조회수: {post.views}</span>
