@@ -21,7 +21,7 @@ const Board = () => {
 
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/post')
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/post`)
         setPosts(response.data)
       } catch (error) {
         console.error("게시글 로딩 실패", error)

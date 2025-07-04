@@ -22,7 +22,8 @@ const SinglePost = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/post/${id}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/post/${id}`);
+
         setPost(res.data);
       } catch (error) {
         console.error("게시글 로딩 실패:", error);
