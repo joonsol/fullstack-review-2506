@@ -16,7 +16,7 @@ const AdminContacts = () => {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/contact", {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/contact`, {
           withCredentials: true
         })
         setContacts(response.data)
@@ -91,7 +91,7 @@ const AdminContacts = () => {
   const handleStatusUpdate = async (contactId, newStatus) => {
     try {
       await axios.put(
-        `http://localhost:3000/api/contact/${contactId}`,
+        `${import.meta.env.VITE_API_URL}/api/contact/${contactId}`,
         { status: newStatus },
         { withCredentials: true }
       )
@@ -123,7 +123,7 @@ const AdminContacts = () => {
     })
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}api/contact/${id}`, {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/contact/${id}`, {
           withCredentials: true
         })
         setContacts(contacts.filter(contact => contact._id !== id))
