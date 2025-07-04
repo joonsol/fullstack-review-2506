@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './Board.scss'
 const Board = () => {
 
-  const nav =useNavigate()
+  const nav = useNavigate()
   const [posts, setPosts] = useState([]);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +22,13 @@ const Board = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/post`)
-        setPosts(response.data)
+        // ✅ JSON 응답이 배열인지 철저히 체크
+        if (Array.isArray(response.data)) {
+          setPosts(response.data);
+        } else {
+          console.warn("받은 데이터가 배열이 아님:", response.data);
+          setPosts([]); // 비배열이면 강제로 빈 배열
+        }
       } catch (error) {
         console.error("게시글 로딩 실패", error)
       }
@@ -32,8 +38,10 @@ const Board = () => {
   }, [])
 
   const filteredPosts = useMemo(() => {
+     if (!Array.isArray(posts)) return [];
+
     return posts.filter((post) => {
-       const value = (post[searchType] || "").toLowerCase();
+     const value = post[searchType]?.toLowerCase() || "";
       const matchesSearch = value.includes(searchTerm.toLowerCase())
 
       const postDate = new Date(post.createdAt).getTime()
@@ -133,8 +141,8 @@ const Board = () => {
           ) : (
             filteredPosts.map((post, index) => (
               <li
-               onClick={()=>nav(`/post/${post._id}`)}
-                className="post-row" 
+                onClick={() => nav(`/post/${post._id}`)}
+                className="post-row"
                 key={post._id} >
                 <div className="col no">
                   {(currentPage - 1) * pageSize + index + 1}</div>
