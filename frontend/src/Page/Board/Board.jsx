@@ -33,7 +33,7 @@ const Board = () => {
 
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
-      const value = post[searchType]?.toLowerCase() || "";
+       const value = (post[searchType] || "").toLowerCase();
       const matchesSearch = value.includes(searchTerm.toLowerCase())
 
       const postDate = new Date(post.createdAt).getTime()
