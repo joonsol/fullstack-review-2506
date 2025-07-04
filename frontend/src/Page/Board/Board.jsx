@@ -23,6 +23,7 @@ const Board = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/post`)
         // ✅ JSON 응답이 배열인지 철저히 체크
+         console.log("✅ API 응답 데이터:", response.data); // 여기를 꼭 확인
         if (Array.isArray(response.data)) {
           setPosts(response.data);
         } else {
