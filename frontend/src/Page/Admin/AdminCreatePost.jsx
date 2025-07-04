@@ -75,7 +75,7 @@ const AdminCreatePost = () => {
         content: editorContent,
         fileUrl: uploadedFiles,
       };
-      await axios.post("http://localhost:3000/api/post", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/post`, {
         title: formData.title,
         content: editorContent,
         fileUrl: uploadedFiles,
