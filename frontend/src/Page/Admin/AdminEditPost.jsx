@@ -21,7 +21,7 @@ const AdminEditPost = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/post/${id}`)
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/post/${id}`)
 
         setFormData({
           title: response.data.title,

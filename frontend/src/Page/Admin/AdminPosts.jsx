@@ -62,7 +62,7 @@ const AdminPosts = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:3000/api/post/${id}`,
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/post/${id}`,
           { withCredentials: true }
         )
         setPosts(posts.filter(post => post._id !== id))

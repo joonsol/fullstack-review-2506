@@ -11,7 +11,7 @@ const Forum = () => {
 
     const fetchPost = async()=>{
       try {
-        const response = await axios.get('http://localhost:3000/api/post')
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/post`)
         setPosts(response.data.slice(0,5))
       } catch (error) {
         console.error("게시글 로딩 실패",error)
