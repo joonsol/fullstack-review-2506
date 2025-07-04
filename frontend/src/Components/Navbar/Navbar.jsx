@@ -40,13 +40,13 @@ const Navbar = () => {
               <MenuItem key={item.path} {...item} />
             ))}
           </ul>
-          <select
+          {/* <select
             onChange={(e) => setLanguage(e.target.value)}
 
             className='language-select' value={language}>
             <option value="ko">한국어</option>
             <option value="en">Englist</option>
-          </select>
+          </select> */}
         </div>
         <button className='menu-toggle-button' onClick={toggleMenu}>
           {isOpen ? <HiX /> : <HiMenu />}
@@ -69,12 +69,12 @@ const Navbar = () => {
               />
             ))}
           </ul>
-          <select className='language-select'
+          {/* <select className='language-select'
             onChange={(e) => setLanguage(e.target.value)}
             value={language}>
             <option value="ko">한국어</option>
             <option value="en">Englist</option>
-          </select>
+          </select> */}
         </div>
       </div>
     </div>

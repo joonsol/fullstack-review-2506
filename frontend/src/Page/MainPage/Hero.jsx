@@ -10,6 +10,12 @@ const Hero = () => {
 
     const tWrapRef = useRef([])
 
+
+    const setSlideRef =(el, idx)=>{
+        if(el) {
+            tWrapRef.current[idx]=el
+        }
+    }
     const slideChange = (splide) => {
         const activeIndex = splide.index
         tWrapRef.current.forEach((ref, index) => {
@@ -55,7 +61,7 @@ const Hero = () => {
                             key={index}
                             style={{ backgroundImage: `url('${item.image}')` }}
                         >
-                            <div className='inner'>
+                            <div className={`inner sl0${index+1}`} ref={(el)=>setSlideRef(el, index)}>
                                 <h2>{item.title}</h2>
                                 <p>{item.description}</p>
                             </div>

@@ -6,23 +6,23 @@ import homeImage4 from "../assets/home4.png";
 export const heroContents = [
   {
     image: homeImage1,
-    title: "Innovative Solutions",
-    description: "Providing innovative solutions to modern problems.",
+    title: "자연에서 찾은 아름다움",
+    description: "천연 유래 성분으로 피부 본연의 빛을 되찾아줍니다.",
   },
   {
     image: homeImage2,
-    title: "Customer Satisfaction",
-    description: "Ensuring satisfaction with every service we deliver.",
+    title: "피부과학의 혁신",
+    description: "피부 전문가와 함께 개발한 맞춤형 스킨케어 솔루션.",
   },
   {
     image: homeImage3,
-    title: "Global Presence",
-    description: "Expanding our reach to serve customers worldwide.",
+    title: "글로벌 뷰티 트렌드",
+    description: "전 세계에서 사랑받는 K-뷰티 브랜드로 도약합니다.",
   },
   {
     image: homeImage4,
-    title: "Sustainable Future",
-    description: "Committed to sustainability and responsible practices.",
+    title: "지속 가능한 아름다움",
+    description: "환경을 생각한 포장과 비건 포뮬러로 지속가능한 뷰티 실현.",
   },
 ];
 export const heroStats = [
