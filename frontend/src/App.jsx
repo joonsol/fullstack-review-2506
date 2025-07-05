@@ -30,7 +30,7 @@ function AuthRedirectRoute() {
     const verifyToken = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/auth/verify-token",
+         `${import.meta.env.VITE_API_URL}/api/auth/verify-token`,
           {},
           { withCredentials: true }
         )
@@ -59,7 +59,7 @@ function ProtectedRoute() {
     const verifyToken = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/auth/verify-token",
+          `${import.meta.env.VITE_API_URL}/api/auth/verify-token`,
           {},
           { withCredentials: true }
         )
